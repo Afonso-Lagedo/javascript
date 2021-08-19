@@ -1,67 +1,148 @@
-//old mode creat object
-/*var obj ={
-	prop1: 'Afonso'
-};
-console.log(obj);
-*/
-
-//propety out function
-/*
-var prop1 = "Afonso";
-var obj = {
-	prop1: prop1
-};
-console.log(obj);*/
-
-
-//with ECMA6
-//if name equal
-/*var prop1 = 'Afonso';
-var obj = {
-	prop1
-};
-console.log(obj);*/
-
-
-//for functions
-/*function method1(){
-	console.log("method1 is on");
+/*function soma(a,b) {
+	return a+b;
 }
-var obj = {
-	method1
-};
-obj.method1();
+
+console.log(soma(5,2));
 */
 
+//unlimited arguments for same function up
+/*function soma(a,b){
+	var valor = 0;
 
-//same function up
-
-/*var obj = {
-	sum: function sum(a,b) {
-		return a+b;
+	for (var i=0; i < arguments.length; i++){
+		valor += arguments[i];
 	}
-};
-console.log(obj.sum(1,5));
-*/
-//sume function up, with ECMA 6
-var obj = {
-	sum(a,b) {//method pointing function
-		return a+b;
-	}
-};
 
-console.log(obj.sum(1,5));
+	return valor;
+}
 
-//old mode of  propety  acess
-/*var propName = 'Afonso';
-var obj = {};
-obj[propName+'teste concatenação'] = 'Afonso teste';
-console.log(obj);
+console.log(soma(1,2,3,4));
 */
 
-//same function up with ECMA6
-var propName = 'Afonso';
-var obj = {
-	[propName+'teste concatenação'] : 'Afonso teste'
+
+
+//same function up with rest operator ...      prototype of arguments is object, prototype of reset is array
+/*function soma(...elementos){
+	return elementos.reduce((a,b) => a+b,0);//reduce: execut a function defined for you for each element of vector, in case a+b and position initial, in case 0
+}
+console.log(soma(1,2,3,4));
+*/
+
+
+//get the rest function
+/*function teste(a,b,...resto){
+	console.log(a,b,resto);
+}
+console.log(teste(1,2,3,4));//a, b and rest
+*/
+
+
+
+/*
+const soma = (...argumentos) => argumentos.reduce((a,b)=> a+b, 1);//initial value is one 
+
+const teste =(...arg) => {
+	return soma.apply(undefined, arg);// passing of function soma for function teste
 };
-console.log(obj);
+
+console.log(teste(1,2,3,4,5));
+*/
+
+//same function up with spread operator "break arrguments"
+/*const soma = (...argumentos) => argumentos.reduce((a,b)=> a+b, 2);//initial value is two
+const teste =(...arg) => {
+	return soma(...arg);// passing of function soma for function teste
+};
+
+console.log(teste(1,2,3,4,5));
+*/
+
+
+//spread operator in strings
+/*const str = 'Afonso Silva';
+
+function teste(...argumentos) {
+	console.log(argumentos);
+}
+
+teste(...str);// passing arguments, obs.: String is character join 
+*/
+
+
+//spread operator in arrays
+const arr = [1,2,3,4];
+
+function teste (){
+	console.log(arguments);//for get all arguments 
+}
+
+teste(...arr);  
+
+//constructing array with spread 
+//old array join
+/*
+const arr2 = arr.concat([5,6,7,8]);
+
+console.log(arr2);
+*/
+
+
+//same function up with spread operator
+const arr2 = [...arr, 5,6];
+console.log(arr2);
+
+const arr3 = [...arr2, ...arr, 0, 0];
+console.log(arr3);
+
+const arrClone = [...arr];
+console.log(arrClone);
+
+//creating of objects iteraveis with spread operator
+
+const obj ={
+	atributo1:123
+};
+
+const obj2 ={
+	...obj,
+	atributo2: 'teste'
+};
+
+
+//obs.: it is error: const obj2=[...obj]; // in case obj2 isn't iteravel
+console.log(obj2);
+
+//overwrite
+const objeto={
+	a:123
+};
+const objeto2={
+	...objeto,
+	a:'Afonso teste'
+};
+
+console.log(objeto2);
+
+//clone
+/*
+const a ={
+	t:123
+}
+
+const b=a;
+
+b.t=456;
+console.log(a);//overwrite propety 
+console.log(b);
+*/
+const a ={
+	t:123
+}
+
+const b ={
+	...a
+}
+
+b.t=456;
+console.log(a);//not overwrite propety
+console.log(b);
