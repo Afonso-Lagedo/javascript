@@ -1,84 +1,213 @@
-//iterator is a interface
-//Generators is function with pause
+//EXAMPLE ONE
 
 /*
-function teste() {
-	console.log('Hello');
-
-	console.log('from');
-	
-	console.log('function');
+function teste1(callback) {
+	setTimeout(function(){
+		callback('Afonso');
+	}, 1000);
 }
+
+function teste2(callback) {
+	setTimeout(function(){
+		callback('Silva');
+	}, 1000);
+}
+
+//calling two  functions
+
+function teste(){
+	teste1(function(a){
+		var processa1 = a.split('');
+
+	teste2(function(b){
+		var processa2 = b.split('');
+
+	setTimeout(function(){
+		console.log(processa1, processa2);
+	},1000);
+	
+	});
+	});
+}	
 
 teste();
 */
 
-//same function, with pause
-/*function* teste() {//* is function with pause
-	console.log('Hello');
-	yield; //reserve word for pause
-	console.log('from');
-	yield 22; //passing value for function. If not passing value undefined
-	console.log('function');
-	yield;
+
+//EXAMPLE TWO
+//with data handling
+/*
+function teste1(callback) {
+	setTimeout(function(){
+		callback('Afonso');
+	}, 1000);
 }
 
-const it = teste();
-//tests of excutation
-console.log(it);
-
-console.log(it.next());
-console.log(it.next());
-console.log(it.next());
-*/
-
-//same function, with passing values for function 
-/*function* teste() {
-	console.log('Hello');
-	yield; 
-	console.log('from');
-	const valor = yield 33; //when
-	console.log(valor);
+function teste2(callback) {
+	setTimeout(function(){
+		callback('Silva');
+	}, 1000);
 }
 
-const it = teste();
-//tests of excutation
-console.log(it);
+//calling two functions
 
-console.log(it.next());
-console.log(it.next());
-console.log(it.next('Test: passing value'));
-*/
+function teste(){
+	try {
+		teste1(function(a){
+			var processa1 = a.split('');
 
-//exemple two
-/*function* naturais (){
-	let numero = 0;
-	while(true){
-		yield numero;
-		numero++;
-	}
-}
+		try{	
+			teste2(function(b){
+				var processa2 = b.split('');
 
-const a = naturais();
+			try{
+				setTimeout(function(){
+					console.log(processa1, processa2);
+				},1000);
+			}catch(err){
+				//error
+			}
 
-console.log(a.next());
-console.log(a.next());
-console.log(a.next());
-console.log(a.next());
-*/
-
-
-//and now with object
-const obj ={
-	valores:[1,2,3,4],
-	*[Symbol.iterator]() {
-		for (var i = 0; i< this.valores.length; i++){
-			yield this.valores[i];
+			});
+		}catch(err){
+			//error
 		}
+		});
+	} catch(err){
+		//error
 	}
-};
+}	
 
-for (let valor of obj){//for each element of obj...
-	console.log(valor);
-}
+teste();
+
+*/
+
+
+//EXAMPLE THREE
+//with Promises   
+//STATUS: pending, fulfilled, rejected
+/*
+const teste1 = new Promise((certo, errado)=>{
+	setTimeout(function () {
+		certo('Afonso');
+	}, 1000);
+});
+
+const teste2 = new Promise((certo, errado)=>{
+	setTimeout(function () {
+		certo('Silva');
+	}, 1000);
+});
+
+console.log(teste1);//pending
+teste1.then(a => console.log(a));//get if correct
+
+console.log(teste2);//pending
+teste2.then(a => console.log(a));//get if correct
+*/
+
+
+//EXAMPLE FOUR
+//with error   
+
+/*const teste1 = new Promise((certo, errado)=>{
+	//throw: pause function, and get first catch block 
+	throw new Error('Algo de errado');
+	setTimeout(function () {
+		certo('Afonso');
+	}, 1000);
+});
+
+const teste2 = new Promise((certo, errado)=>{
+	setTimeout(function () {
+		certo('Silva');
+	}, 1000);
+});
+
+console.log(teste1);//pending
+teste1
+	.then(a => console.log(a))
+	.catch(error => console.log(error));//if exist error
+*/
+
+//EXAMPLE FIVE
+//invocation of new promises
+//promises in promises
+/*
+const testeA = new Promise((certo, errado)=>{
+	setTimeout(function () {
+		certo('Afonso');
+	}, 1000);
+});
+
+const testeB = new Promise((certo, errado)=>{
+	setTimeout(function () {
+		certo('Silva');
+	}, 1000);
+});
+
+testeA
+	.then(a => {
+		console.log(a);
+		return testeB;
+	})
+	.then(b => console.log(b))
+	.catch();
+
+*/
+
+
+//EXAMPLE SIX
+//with functions
+/*
+const testeA = () => new Promise((certo, errado)=>{
+	setTimeout(function () {
+		certo('Afonso');
+	}, 1000);
+});
+
+const testeB = () => new Promise((certo, errado)=>{
+	//SIMULATED ERROR: throw new Error('teste de erro');
+	setTimeout(function () {
+		certo('Silva');
+	}, 1000);
+});
+
+//1)
+//testeA()
+//	.then(a => {
+//		console.log(a);
+//		return testeB();
+//	})
+//	.then(b => console.log(b))
+//	.catch(error=> console.log('ops, erro'));
+//2)or two promise did execute in same time 
+Promise.all([testeA(), testeB()]).then(c => {
+	console.log(c);  
+});
+
+*/
+
+
+//EXAMPLE SEVEN
+//same function with time not equal
+
+const testeA = () => new Promise((certo, errado)=>{
+	setTimeout(function () {
+		certo('Afonso');
+	}, 1500);//after
+});
+
+const testeB = () => new Promise((certo, errado)=>{
+	//SIMULATED ERROR: throw new Error('teste de erro');
+	setTimeout(function () {
+		certo('Silva');
+	}, 1000);
+});
+
+//promise that runs first, in case testeB time:1500
+Promise.race([testeA(), testeB()]).then(c => {
+	console.log(c);  
+});
+
 
