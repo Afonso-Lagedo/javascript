@@ -1,213 +1,119 @@
-//EXAMPLE ONE
-
-/*
-function teste1(callback) {
-	setTimeout(function(){
-		callback('Afonso');
-	}, 1000);
-}
-
-function teste2(callback) {
-	setTimeout(function(){
-		callback('Silva');
-	}, 1000);
-}
-
-//calling two  functions
-
-function teste(){
-	teste1(function(a){
-		var processa1 = a.split('');
-
-	teste2(function(b){
-		var processa2 = b.split('');
-
-	setTimeout(function(){
-		console.log(processa1, processa2);
-	},1000);
-	
-	});
-	});
-}	
-
-teste();
+//EXEMPLE 1:get reference
+/*fetch('/javascript/js/data.json').then(responseStram => {
+	console.log(responseStram);
+});
 */
 
 
-//EXAMPLE TWO
-//with data handling
-/*
-function teste1(callback) {
-	setTimeout(function(){
-		callback('Afonso');
-	}, 1000);
-}
+//EXEMPLE 2: get values
+/*fetch('/javascript/js/data.json').then(responseStram => {
+	responseStram.json().then(valor => {
+		console.log(valor);
+	});
+});
+*/
 
-function teste2(callback) {
-	setTimeout(function(){
-		callback('Silva');
-	}, 1000);
-}
 
-//calling two functions
+//EXEMPLE 3: same function, promise in localization not equal
+/*fetch('/javascript/js/data.json')
+	.then(responseStram => responseStram.json())
+	.then(valor => {
+		console.log(valor);
+});
+*/
 
-function teste(){
-	try {
-		teste1(function(a){
-			var processa1 = a.split('');
 
-		try{	
-			teste2(function(b){
-				var processa2 = b.split('');
+//EXEMPLE 4: with error of rede
+/*fetch('http://localhost:666/javascript/js/data.json')
+	.then(responseStram => responseStram.json())
+	.then(valor => {
+		console.log(valor);
+}).catch(erro =>{
+	console.log('EROUUUUU: ', erro);
+});
+*/
 
-			try{
-				setTimeout(function(){
-					console.log(processa1, processa2);
-				},1000);
-			}catch(err){
-				//error
-			}
 
-			});
-		}catch(err){
-			//error
+//EXEMPLE 5: with error
+/*fetch('/javascript/js/dataERROR.json')
+	.then(teste => {
+		if(teste.status === 200){
+			return teste.json();
+		}else{
+			throw new Error('TESTE ERRO');
 		}
-		});
-	} catch(err){
-		//error
-	}
-}	
-
-teste();
-
-*/
-
-
-//EXAMPLE THREE
-//with Promises   
-//STATUS: pending, fulfilled, rejected
-/*
-const teste1 = new Promise((certo, errado)=>{
-	setTimeout(function () {
-		certo('Afonso');
-	}, 1000);
-});
-
-const teste2 = new Promise((certo, errado)=>{
-	setTimeout(function () {
-		certo('Silva');
-	}, 1000);
-});
-
-console.log(teste1);//pending
-teste1.then(a => console.log(a));//get if correct
-
-console.log(teste2);//pending
-teste2.then(a => console.log(a));//get if correct
-*/
-
-
-//EXAMPLE FOUR
-//with error   
-
-/*const teste1 = new Promise((certo, errado)=>{
-	//throw: pause function, and get first catch block 
-	throw new Error('Algo de errado');
-	setTimeout(function () {
-		certo('Afonso');
-	}, 1000);
-});
-
-const teste2 = new Promise((certo, errado)=>{
-	setTimeout(function () {
-		certo('Silva');
-	}, 1000);
-});
-
-console.log(teste1);//pending
-teste1
-	.then(a => console.log(a))
-	.catch(error => console.log(error));//if exist error
-*/
-
-//EXAMPLE FIVE
-//invocation of new promises
-//promises in promises
-/*
-const testeA = new Promise((certo, errado)=>{
-	setTimeout(function () {
-		certo('Afonso');
-	}, 1000);
-});
-
-const testeB = new Promise((certo, errado)=>{
-	setTimeout(function () {
-		certo('Silva');
-	}, 1000);
-});
-
-testeA
-	.then(a => {
-		console.log(a);
-		return testeB;
+	})	
+	.then(valor => {
+		console.log(valor);
 	})
-	.then(b => console.log(b))
-	.catch();
-
+	.catch(erro =>{
+		console.log('EROUUUUU: ', erro);
+});
 */
 
+//ASYNC and AWAIT
 
-//EXAMPLE SIX
-//with functions
-/*
-const testeA = () => new Promise((certo, errado)=>{
-	setTimeout(function () {
-		certo('Afonso');
-	}, 1000);
+//tranformated function in promise
+/*const teste = async () =>{
+	return 12345;
+};*/
+
+//return promise
+//console.log(teste());
+
+//return values of function
+//teste().then(valor =>{
+//	console.log(valor);
+//});
+
+//return values of function with error
+/*teste().then(valor =>{
+	throw new Error('EROUUUUUU');//force error
+}).catch(erro =>{//if error
+	console.log(erro);
 });
-
-const testeB = () => new Promise((certo, errado)=>{
-	//SIMULATED ERROR: throw new Error('teste de erro');
-	setTimeout(function () {
-		certo('Silva');
-	}, 1000);
-});
-
-//1)
-//testeA()
-//	.then(a => {
-//		console.log(a);
-//		return testeB();
-//	})
-//	.then(b => console.log(b))
-//	.catch(error=> console.log('ops, erro'));
-//2)or two promise did execute in same time 
-Promise.all([testeA(), testeB()]).then(c => {
-	console.log(c);  
-});
-
 */
 
+//EXAMPLE2 used Await
+/*const tempo = () =>
+	new Promise((resolve, reject)=>{
+		setTimeout(()=>{
+			resolve(123456);
+		},2000);
+	});
 
-//EXAMPLE SEVEN
-//same function with time not equal
+const exemplo = async () => {
+	const valor = await tempo();// used promise resolved
+	console.log(valor);
+	const valor2 = await fetch('/javascript/js/data.json').then(a =>
+		a.json()
+		);
+	return valor2;
+};
 
-const testeA = () => new Promise((certo, errado)=>{
-	setTimeout(function () {
-		certo('Afonso');
-	}, 1500);//after
-});
+exemplo()
+	.then(data =>{
+		console.log(data);
+	}); 
+*/
+//EXAMPLE 3: procesand os dois await ao mesmo tempo 
 
-const testeB = () => new Promise((certo, errado)=>{
-	//SIMULATED ERROR: throw new Error('teste de erro');
-	setTimeout(function () {
-		certo('Silva');
-	}, 1000);
-});
+const tempo = () =>
+	new Promise((resolve, reject)=>{
+		setTimeout(()=>{
+			resolve(123456);
+		},2000);
+	});
 
-//promise that runs first, in case testeB time:1500
-Promise.race([testeA(), testeB()]).then(c => {
-	console.log(c);  
-});
+const exemplo = async () => {
+	const valor = await Promise.all([
+	tempo(),
+	fetch('/javascript/js/data.json').then(a => a.json())
+	]);
+	return valor;
+};
 
-
+exemplo()
+	.then(data =>{
+		console.log(data);
+	});
